@@ -397,7 +397,7 @@ function buildTrack(role: TrackRole, settings: ComposerSettings, progression: nu
     ['arpeggio', () => generateArpeggio(settings, rng, progression, sections)],
   ])
   const generateNotes = generators.get(role)
-  if (!generateNotes) throw new Error('Choose a supported track role.')
+  if (typeof generateNotes !== 'function') throw new Error('Choose a supported track role.')
   const volume: Record<TrackRole, number> = { drums: 0.72, bass: 0.68, harmony: 0.52, melody: 0.66, countermelody: 0.48, arpeggio: 0.42 }
   const pan: Record<TrackRole, number> = { drums: 0, bass: 0, harmony: -0.2, melody: 0.12, countermelody: -0.28, arpeggio: 0.3 }
   return {
