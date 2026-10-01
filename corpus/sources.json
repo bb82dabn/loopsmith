@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "policy": "All OpenGameArt licenses are eligible when their obligations are recorded. Source MIDI is used only to derive corpus-wide aggregate statistics; note sequences and source files are not distributed with LoopSmith.",
+  "sources": [
+    {
+      "id": "oga-generic-8bit-jrpg",
+      "title": "Generic 8-bit JRPG Soundtrack",
+      "author": "AVGVSTA",
+      "pageUrl": "https://opengameart.org/content/generic-8-bit-jrpg-soundtrack",
+      "archiveUrl": "https://opengameart.org/sites/default/files/Rev%202%20Source.zip",
+      "offeredLicenses": ["CC-BY-4.0", "CC-BY-3.0", "OGA-BY-3.0"],
+      "selectedLicense": "CC-BY-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Generic 8-bit JRPG Soundtrack by AVGVSTA, licensed CC BY 4.0",
+      "expectedMidiFiles": 25
+    }
+  ]
+}

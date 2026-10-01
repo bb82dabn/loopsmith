@@ -1,0 +1,14 @@
+LoopSmith training corpus attribution
+=====================================
+
+LoopSmith uses only aggregate statistics derived offline from the following
+licensed MIDI source. No source MIDI, audio, melody, chord sequence, rhythm
+template, or arrangement is included in LoopSmith or its generated exports.
+
+Generic 8-bit JRPG Soundtrack
+Creator: AVGVSTA
+Source: https://opengameart.org/content/generic-8-bit-jrpg-soundtrack
+Selected license: Creative Commons Attribution 4.0 International
+License: https://creativecommons.org/licenses/by/4.0/
+Use: aggregate interval, duration, onset, harmonic-motion, density, and
+arrangement statistics across 25 MIDI files.

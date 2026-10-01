@@ -1,0 +1,55 @@
+{
+  "name": "loopsmith",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build:core": "tsc -p packages/core/tsconfig.json",
+    "build": "npm run build:core && tsc -b && vite build",
+    "build:itch": "npm run build:core && tsc -b && vite build --mode itch",
+    "media:itch": "npm run build:itch && node tools/capture-itch-media.mjs",
+    "package:itch": "npm run build:itch && node tools/package-itch.mjs",
+    "corpus:analyze": "node tools/analyze-midi-corpus.mjs",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "serve": "node server.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:itch": "playwright test --config playwright.itch.config.ts",
+    "test:package": "node --test tests/release-package.test.mjs",
+    "verify:release": "node tools/verify-release.mjs",
+    "typecheck": "npm run build:core && tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
+    "@loopsmith/core": "file:packages/core",
+    "@tonejs/midi": "^2.0.28",
+    "fflate": "^0.8.3",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.62.1",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^6.0.5",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "js-yaml": "^4.3.2",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.11"
+  }
+}

@@ -1,0 +1,34 @@
+[Unit]
+Description=LoopSmith production web application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/loopsmith
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=4173
+ExecStart=%h/.local/bin/node %h/projects/loopsmith/server.mjs
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=-%h/projects/loopsmith/dist/release-transfer
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+SystemCallArchitectures=native
+MemoryMax=512M
+TasksMax=128
+
+[Install]
+WantedBy=default.target
