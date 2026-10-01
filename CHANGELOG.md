@@ -12,5 +12,6 @@ First public LoopSmith release under the MIT License.
 - Sequence-free corpus priors with preserved CC BY attribution; no source MIDI or sampled game audio is distributed.
 - Local reusable `@loopsmith/core` composer/renderer package, static deployment support, and nested-path browser packaging.
 - Public CI, CodeQL, community documentation, corresponding encoder source, license texts, and archive verification.
+- Validated generator dispatch rejects unsupported/prototype-named roles during duplicated-track regeneration, with deterministic coverage for all six supported roles.
 
 MP3 playback is not universally gapless. Use WAV when sample-exact looping is required and test exports in the target game engine. Real iOS/Android support has not been certified.

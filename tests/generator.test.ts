@@ -3,6 +3,7 @@ import { calculateDuration, calculateMeasures, duplicateTrack, generateCompositi
 import { PRESETS, settingsFromPreset } from '../src/music/presets'
 import { TRACK_RANGES } from '../src/music/theory'
 import { MIDI_PERCUSSION_CHANNEL } from '../src/music/types'
+import type { TrackRole } from '../src/music/types'
 
 function maximumPolyphony(notes: { startBeats: number; durationBeats: number }[]): number {
   const endings: number[] = []
@@ -18,6 +19,33 @@ function maximumPolyphony(notes: { startBeats: number; durationBeats: number }[]
 }
 
 describe('deterministic procedural generation', () => {
+  it.each(['toString', 'constructor', '__proto__', 'unsupported-role'])('rejects an untrusted duplicated-track role %s before generator dispatch', (role) => {
+    const settings = settingsFromPreset('battle', 'untrusted-duplicate-role')
+    const previous = duplicateTrack(generateComposition(settings), 'melody')
+    const malformed = {
+      ...previous,
+      tracks: previous.tracks.map((track) => track.id === 'melody-copy-1' ? { ...track, role: role as TrackRole } : track),
+    }
+
+    expect(() => generateComposition(settings, malformed, 'melody-copy-1')).toThrow('Choose a supported track role.')
+  })
+
+  it.each<TrackRole>(['drums', 'bass', 'harmony', 'melody', 'countermelody', 'arpeggio'])('preserves deterministic %s duplicate regeneration', (role) => {
+    const settings = { ...settingsFromPreset('battle', 'safe-duplicate-regeneration'), complexity: 5 }
+    const original = generateComposition(settings)
+    const previous = duplicateTrack(original, role)
+    const before = structuredClone(previous)
+    const copyId = `${role}-copy-1`
+    const expected = generateComposition(settings, original, role).tracks.find((track) => track.id === role)!
+    const regenerated = generateComposition(settings, previous, copyId)
+    const copy = regenerated.tracks.find((track) => track.id === copyId)!
+
+    expect(copy.notes).toEqual(expected.notes.map((note) => ({ ...note, id: `${copyId}-${note.id}` })))
+    expect(copy.revision).toBe(1)
+    expect(regenerated.tracks.find((track) => track.id === role)).toEqual(original.tracks.find((track) => track.id === role))
+    expect(previous).toEqual(before)
+  })
+
   it('reproduces the same composition for the same settings and seed', () => {
     const settings = settingsFromPreset('forest-exploration', 'repeatable-map-42')
     expect(generateComposition(settings)).toEqual(generateComposition({ ...settings }))

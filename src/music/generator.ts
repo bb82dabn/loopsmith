@@ -388,14 +388,16 @@ function generateArpeggio(settings: ComposerSettings, rng: SeededRandom, progres
 
 function buildTrack(role: TrackRole, settings: ComposerSettings, progression: number[], measures: number, sections: ArrangementSection[], revision: number): Track {
   const rng = new SeededRandom(`${settings.seed}|${settings.variation}|${role}|${revision}|${settings.key}|${settings.scale}|${settings.complexity}|${settings.intensity}`)
-  const generators: Record<TrackRole, () => NoteEvent[]> = {
-    drums: () => generateDrums(settings, rng, measures, sections),
-    bass: () => generateBass(settings, rng, progression, sections),
-    harmony: () => generateHarmony(settings, progression, sections),
-    melody: () => generateMelody(settings, rng, measures, sections, progression),
-    countermelody: () => generateCountermelody(settings, rng, progression, sections),
-    arpeggio: () => generateArpeggio(settings, rng, progression, sections),
-  }
+  const generators = new Map<TrackRole, () => NoteEvent[]>([
+    ['drums', () => generateDrums(settings, rng, measures, sections)],
+    ['bass', () => generateBass(settings, rng, progression, sections)],
+    ['harmony', () => generateHarmony(settings, progression, sections)],
+    ['melody', () => generateMelody(settings, rng, measures, sections, progression)],
+    ['countermelody', () => generateCountermelody(settings, rng, progression, sections)],
+    ['arpeggio', () => generateArpeggio(settings, rng, progression, sections)],
+  ])
+  const generateNotes = generators.get(role)
+  if (!generateNotes) throw new Error('Choose a supported track role.')
   const volume: Record<TrackRole, number> = { drums: 0.72, bass: 0.68, harmony: 0.52, melody: 0.66, countermelody: 0.48, arpeggio: 0.42 }
   const pan: Record<TrackRole, number> = { drums: 0, bass: 0, harmony: -0.2, melody: 0.12, countermelody: -0.28, arpeggio: 0.3 }
   return {
@@ -404,7 +406,7 @@ function buildTrack(role: TrackRole, settings: ComposerSettings, progression: nu
     role,
     channel: CHANNELS[role],
     instrument: defaultInstrument(role, settings.instrumentation),
-    notes: generators[role](),
+    notes: generateNotes(),
     volume: volume[role],
     pan: pan[role],
     mute: false,
